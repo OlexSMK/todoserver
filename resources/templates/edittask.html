@@ -22,9 +22,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-<!-- Bootstrap Date-Picker Plugin -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/todolist">Home</a>
@@ -52,12 +50,7 @@
         </div>
         <div class="form-group">
             <label for="exampleTaskDueDate">Due date</label>
-            <input name="DueDate" placeholder="${todo.dueDate}" type="text" id="date-picker" class="form-control datepicker" value="${todo.dueDate}">
-            <script type="text/javascript">
-            $(function () {
-                $('.date-picker').datetimepicker();
-            });
-</script>
+            <input name="DueDate" placeholder="${todo.dueDate}" type="date" id="date-picker" class="form-control datepicker" value="${todo.dueDate}">
         </div>
         <div class="form-group">
             <label for="exampleTaskPriority">Priority</label>
