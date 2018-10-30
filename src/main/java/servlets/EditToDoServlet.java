@@ -30,7 +30,7 @@ public class EditToDoServlet extends HttpServlet{
         String sourcePage;
         String requested = request.getRequestURI().replaceFirst(BASE_EDIT,"");
         try {
-                int toDoId= Integer.valueOf(requested);
+            int toDoId= Integer.valueOf(requested);
             listMap.put("todo",toDoList.get(toDoId));
             sourcePage="edittask.html";
         }catch (Exception e){
@@ -45,7 +45,7 @@ public class EditToDoServlet extends HttpServlet{
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse responce) throws ServletException, IOException {
         String requested = request.getRequestURI().replaceFirst(BASE_EDIT, "");
         try {
             int toDoId = Integer.parseInt(requested);
@@ -54,14 +54,14 @@ public class EditToDoServlet extends HttpServlet{
             LocalDate dueDate = LocalDate.parse(request.getParameter("DueDate"), DateTimeFormatter.ofPattern("yyyy-MM-d"));
 
             toDoList.set(toDoId, name, dueDate, priority);
-            response.sendRedirect("/todolist");
+            responce.sendRedirect("/todolist");
         }catch (Exception e){
             PageGenerator pageGenerator = PageGenerator.instance();
             Map<String,Object> listMap= new HashMap<>();
             listMap.put("requested",requested);
             listMap.put("action","modification");
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write(pageGenerator.getPage("notfound.html", listMap));
+            responce.setContentType("text/html;charset=utf-8");
+            responce.getWriter().write(pageGenerator.getPage("notfound.html", listMap));
         }
 
 

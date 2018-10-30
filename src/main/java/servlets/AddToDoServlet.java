@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddToDoServlet extends HttpServlet {
     ToDoListService toDoList;
@@ -27,13 +29,25 @@ public class AddToDoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse responce) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        int priority = Integer.parseInt(request.getParameter("priority"));
+        try {
+            String name = request.getParameter("name");
+            int priority = Integer.parseInt(request.getParameter("priority"));
 
-        LocalDate dueDate = LocalDate.parse(request.getParameter("DueDate"), DateTimeFormatter.ofPattern("yyyy-MM-d"));
-        ToDoEntry toDo  = new ToDoEntry(name,dueDate,priority);
-        toDoList.add(toDo);
+            LocalDate dueDate = LocalDate.parse(request.getParameter("DueDate"), DateTimeFormatter.ofPattern("yyyy-MM-d"));
+            ToDoEntry toDo  = new ToDoEntry(name,dueDate,priority);
+            toDoList.add(toDo);
 
-        responce.sendRedirect("/todolist");
+            responce.sendRedirect("/todolist");
+        }catch (Exception e){
+            e.printStackTrace();
+            PageGenerator pageGenerator = PageGenerator.instance();
+            Map<String,Object> listMap= new HashMap<>();
+            listMap.put("requested","new task");
+            listMap.put("action","add");
+            responce.setContentType("text/html;charset=utf-8");
+            responce.getWriter().write(pageGenerator.getPage("notfound.html", listMap));
+
+        }
+
     }
 }
