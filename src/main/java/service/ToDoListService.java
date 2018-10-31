@@ -1,74 +1,49 @@
 package service;
 
+import dao.JdbcToDoDao;
 import entry.ToDoEntry;
+import exception.ToDoException;
 
-import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ToDoListService {
-    List<ToDoEntry> listToDo;
+    JdbcToDoDao jdbcToDoDao;
 
     public ToDoListService() {
-        this.listToDo = new ArrayList<>();
-        try{
-            BufferedReader fileList = new BufferedReader(new InputStreamReader(new FileInputStream("resources\\todo.file")));
-            String line;
-            while((line = fileList.readLine()) != null){
-                if (!line.equals("")) {
-                    String[] attr = line.split(";", 3);
-                    listToDo.add(new ToDoEntry(attr[0], LocalDate.parse(attr[1], DateTimeFormatter.ofPattern("yyyy-MM-d")), Integer.parseInt(attr[2])));
-                }
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        jdbcToDoDao = new JdbcToDoDao();
     }
 
     public void add(ToDoEntry item){
-        listToDo.add(item);
+        jdbcToDoDao.add(item);
     }
 
-    public void remove(Integer toDoId){
-        Iterator iterator = listToDo.iterator();
-        boolean taskFound = false;
-        while(iterator.hasNext()){
-            ToDoEntry toDo = (ToDoEntry) iterator.next();
-            if(toDo.getId()==toDoId.intValue()){
-                iterator.remove();
-                taskFound = true;
-                break;
-            }
-        }
-        if(!taskFound) {
-            throw new NullPointerException("Could't remove task with id# " + toDoId);
+    public void remove(Integer toDoId) throws ToDoException{
+        int items = jdbcToDoDao.removeById(toDoId);
+        if(items ==0) {
+            throw new ToDoException("ToDo task was not removed with id " + toDoId);
         }
     }
 
-    public ToDoEntry get(Integer toDoId){
-        ToDoEntry toDo = null;
-        Iterator iterator = listToDo.iterator();
-        while(iterator.hasNext()){
-            toDo = (ToDoEntry) iterator.next();
-            if(toDo.getId()==toDoId.intValue()){
-                break;
-            }
-            toDo =null;
+    public ToDoEntry get(Integer toDoId) throws ToDoException{
+        ToDoEntry toDo = jdbcToDoDao.getById(toDoId);
+        if(toDo == null){
+            throw new ToDoException("ToDo task was not founded with id " + toDoId);
         }
         return toDo;
     }
-    public void set(int id, String name,LocalDate dueDate,int priority){
-        ToDoEntry toDo = get(id);
-        toDo.setName(name);
-        toDo.setDueDate(dueDate);
-        toDo.setPriority(priority);
+    public void set(int toDoId, String name,LocalDate dueDate,int priority) throws ToDoException {
+        ToDoEntry toDo = get(toDoId);
+        if(!toDo.getName().equals(name) || !toDo.getDueDate().equals(dueDate) || toDo.getPriority()!=priority){
+            int items = jdbcToDoDao.updateById(toDoId,name,dueDate,priority);
+            if(items==0){
+                throw new ToDoException("ToDo task was not updated with id " + toDoId);
+            }
+        }
     }
 
     public List<ToDoEntry> getAll(){
-        return listToDo;
+        return jdbcToDoDao.getAll();
     }
 
 }

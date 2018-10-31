@@ -9,10 +9,9 @@ public class ToDoEntry {
     private String name;
     private LocalDate dueDate;
     private int priority;
-    private static int toDoNextId = 1;
 
-    public ToDoEntry( String name, LocalDate dueDate, int priority) {
-        this.id = toDoNextId++;
+    public ToDoEntry( int id,String name, LocalDate dueDate, int priority) {
+        this.id = id;
         this.name = name;
         this.dueDate = dueDate;
         this.priority = priority;

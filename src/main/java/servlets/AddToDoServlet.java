@@ -34,7 +34,7 @@ public class AddToDoServlet extends HttpServlet {
             int priority = Integer.parseInt(request.getParameter("priority"));
 
             LocalDate dueDate = LocalDate.parse(request.getParameter("DueDate"), DateTimeFormatter.ofPattern("yyyy-MM-d"));
-            ToDoEntry toDo  = new ToDoEntry(name,dueDate,priority);
+            ToDoEntry toDo  = new ToDoEntry(-1,name,dueDate,priority);
             toDoList.add(toDo);
 
             responce.sendRedirect("/todolist");

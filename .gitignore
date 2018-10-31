@@ -24,4 +24,9 @@ hs_err_pid*
 
 #IDEA
 .idea/*
-target.*
+target/*
+resources_test/*
+src/main/ToDoWebServer.iml
+
+#Database
+database/*
